@@ -1,0 +1,16 @@
+.checkOut {
+  display: flex;
+  padding: 20px;
+  background-color: white;
+  height: max-content;
+}
+.checkOut_ad {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.checkOut_title {
+  width: 100%;
+  margin-right: 10px;
+  border-bottom: 1px solid lightgray;
+}
