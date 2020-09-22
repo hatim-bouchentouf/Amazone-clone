@@ -1,5 +1,5 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import Axios from "axios";
+import axios from "../../axios";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { Link, useHistory } from "react-router-dom";
@@ -15,7 +15,7 @@ function Payment() {
   const stripe = useStripe();
   const elements = useElements();
   const [succeeded, setSucceeded] = useState(false);
-  const [processing, setProcessing] = useState("");
+  const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState(true);
@@ -23,7 +23,7 @@ function Payment() {
   useEffect(() => {
     // generate the special stripe secret which allows us to charge a customer
     const getClientSecret = async () => {
-      const response = await Axios({
+      const response = await axios({
         method: "post",
         // Stripe expects the total in a currencies subunits
         url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
@@ -33,9 +33,10 @@ function Payment() {
 
     getClientSecret();
   }, [basket]);
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (event) => {
     // do all the fancy stripe stuff...
-    e.preventDefault();
+    event.preventDefault();
     setProcessing(true);
 
     const payload = await stripe
@@ -46,7 +47,6 @@ function Payment() {
       })
       .then(({ paymentIntent }) => {
         // paymentIntent = payment confirmation
-
         db.collection("users")
           .doc(user?.uid)
           .collection("orders")
@@ -56,7 +56,6 @@ function Payment() {
             amount: paymentIntent.amount,
             created: paymentIntent.created,
           });
-
         setSucceeded(true);
         setError(null);
         setProcessing(false);
@@ -64,10 +63,10 @@ function Payment() {
         dispatch({
           type: "EMPTY_BASKET",
         });
-
         history.replace("/orders");
       });
   };
+
   const handleChange = (e) => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
@@ -100,6 +99,7 @@ function Payment() {
           <div className="payment_items">
             {basket.map((item) => (
               <CheckoutProduct
+                key={item.id}
                 id={item.id}
                 title={item.title}
                 image={item.image}

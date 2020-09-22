@@ -2,21 +2,26 @@ import React from "react";
 import GradeIcon from "@material-ui/icons/Grade";
 import "./Product.css";
 import { useStateValue } from "../StateProvider/StateProvider";
+import { useHistory } from "react-router-dom";
 
 function Product({ id, title, image, price, rating }) {
-  const [{ basket }, dispatch] = useStateValue();
-
+  const [{ basket, user }, dispatch] = useStateValue();
+  let history = useHistory();
   const addToBasket = () => {
-    dispatch({
-      type: "ADD_TO_BASKET",
-      item: {
-        id: id,
-        title: title,
-        image: image,
-        price: price,
-        rating: rating,
-      },
-    });
+    if (user) {
+      dispatch({
+        type: "ADD_TO_BASKET",
+        item: {
+          id: id,
+          title: title,
+          image: image,
+          price: price,
+          rating: rating,
+        },
+      });
+    } else {
+      history.push("/SignIn");
+    }
   };
   return (
     <div className="product">
@@ -30,7 +35,7 @@ function Product({ id, title, image, price, rating }) {
           {Array(rating)
             .fill()
             .map((_, i) => (
-              <GradeIcon style={{ color: "orange" }} />
+              <GradeIcon key={i} style={{ color: "orange" }} />
             ))}
         </div>
       </div>

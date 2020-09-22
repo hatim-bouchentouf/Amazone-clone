@@ -9,6 +9,7 @@ import { useStateValue } from "./Components/StateProvider/StateProvider";
 import Payment from "./Components/payment/Payment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import Orders from "./Components/orders/Orders";
 
 const promise = loadStripe(
   "pk_test_51HSlalBBZHwOu0PCwjHc518ED74krzBsYqG83HaMZ1RjIkIxetQ0rFHOCx7GFMyRor1eUFTbdwYQXUFIo88VvHid00krUnjx0C"
@@ -20,8 +21,6 @@ const App = () => {
     // will only run once when the app component loads...
 
     auth.onAuthStateChanged((authUser) => {
-      console.log("THE USER IS >>> ", authUser);
-
       if (authUser) {
         // the user just logged in / the user was logged in
 
@@ -46,11 +45,15 @@ const App = () => {
             <Header />
             <Home />
           </Route>
+          <Route path="/orders">
+            <Header />
+            <Orders />
+          </Route>
           <Route path="/CheckOut">
             <Header />
             <CheckOut />
           </Route>
-          <Route path="/Payment">
+          <Route path="/payment">
             <Header />
             <Elements stripe={promise}>
               <Payment />
