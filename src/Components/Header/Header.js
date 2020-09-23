@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useStateValue } from "../StateProvider/StateProvider";
 import { auth } from "../../firebase";
 function Header() {
-  const [{ basket, user }, dispatch] = useStateValue();
+  const [{ basket, user, color }, dispatch] = useStateValue();
   const handleAuthenticaton = () => {
     if (user) {
       auth.signOut();
@@ -53,7 +53,7 @@ function Header() {
         </div>
         <Link to="/CheckOut">
           <div className="header_optionBasket">
-            <ShoppingBasket />
+            <ShoppingBasket style={{ color: color }} />
             <span className="header_optionLineTwo header_basketCount">
               {basket?.length}
             </span>

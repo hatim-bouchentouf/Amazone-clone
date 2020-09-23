@@ -1,6 +1,7 @@
 export const initialState = {
   basket: [],
   user: null,
+  color: null,
 };
 
 // Selector
@@ -14,6 +15,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         basket: [...state.basket, action.item],
+        color: "orange",
       };
 
     case "EMPTY_BASKET":

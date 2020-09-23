@@ -7,8 +7,7 @@ import Order from "./Order";
 function Orders() {
   const [{ user }] = useStateValue();
   const [orders, setOrders] = useState([]);
-  const [empty, setEmpty] = useState(null);
-  const [wait, setWait] = useState(null);
+
   useEffect(() => {
     if (user) {
       db.collection("users")
